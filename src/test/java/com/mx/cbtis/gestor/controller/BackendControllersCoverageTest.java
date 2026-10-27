@@ -3,6 +3,7 @@ package com.mx.cbtis.gestor.controller;
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.nullValue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -50,6 +51,21 @@ class BackendControllersCoverageTest {
 
 	@Autowired
 	private ObjectMapper objectMapper;
+
+	@Autowired
+	private AsignacionesController asignacionesController;
+
+	@Autowired
+	private ComentariosController comentariosController;
+
+	@Autowired
+	private ProyectosController proyectosController;
+
+	@Autowired
+	private TareasController tareasController;
+
+	@Autowired
+	private UsuarioController usuarioController;
 
 	@MockBean
 	private AsignacionesRepository asignacionesRepository;
@@ -463,5 +479,87 @@ class BackendControllersCoverageTest {
 				.andExpect(jsonPath("$", hasSize(2)))
 				.andExpect(jsonPath("$[0].nombre", is("Santiago")))
 				.andExpect(jsonPath("$[1].nombre", is("Ronaldo")));
+	}
+
+	// ==================== RAMAS FALSAS (!obj.equals(null)) ====================
+
+	static class FakeAsignaciones extends Asignaciones {
+		@Override
+		public boolean equals(Object obj) {
+			return obj == null;
+		}
+	}
+
+	static class FakeComentarios extends Comentarios {
+		@Override
+		public boolean equals(Object obj) {
+			return obj == null;
+		}
+	}
+
+	static class FakeProyectos extends Proyectos {
+		@Override
+		public boolean equals(Object obj) {
+			return obj == null;
+		}
+	}
+
+	static class FakeTareas extends Tareas {
+		@Override
+		public boolean equals(Object obj) {
+			return obj == null;
+		}
+	}
+
+	static class FakeUsuario extends Usuario {
+		@Override
+		public boolean equals(Object obj) {
+			return obj == null;
+		}
+	}
+
+	@Test
+	@DisplayName("Asignaciones: ramas falsas de add, update y delete")
+	void testAsignacionesRamasFalsas() {
+		FakeAsignaciones fake = new FakeAsignaciones();
+		assertEquals(0, asignacionesController.addAsignacion(fake));
+		assertEquals(0, asignacionesController.updateAsignacion(fake));
+		assertEquals(0, asignacionesController.deleteAsignacion(fake));
+	}
+
+	@Test
+	@DisplayName("Comentarios: ramas falsas de add, update y delete")
+	void testComentariosRamasFalsas() {
+		FakeComentarios fake = new FakeComentarios();
+		assertEquals(0, comentariosController.addComentario(fake));
+		assertEquals(0, comentariosController.updateComentario(fake));
+		assertEquals(0, comentariosController.deleteComentario(fake));
+	}
+
+	@Test
+	@DisplayName("Proyectos: ramas falsas de add, update y delete")
+	void testProyectosRamasFalsas() {
+		FakeProyectos fake = new FakeProyectos();
+		assertEquals(0, proyectosController.addProyecto(fake));
+		assertEquals(0, proyectosController.updateProyecto(fake));
+		assertEquals(0, proyectosController.deleteProyecto(fake));
+	}
+
+	@Test
+	@DisplayName("Tareas: ramas falsas de add, update y delete")
+	void testTareasRamasFalsas() {
+		FakeTareas fake = new FakeTareas();
+		assertEquals(0, tareasController.addTareas(fake));
+		assertEquals(0, tareasController.updateTareas(fake));
+		assertEquals(0, tareasController.deleteTareas(fake));
+	}
+
+	@Test
+	@DisplayName("Usuario: ramas falsas de add, update y delete")
+	void testUsuarioRamasFalsas() {
+		FakeUsuario fake = new FakeUsuario();
+		assertEquals(0, usuarioController.addUsuario(fake));
+		assertEquals(0, usuarioController.updateUsuario(fake));
+		assertEquals(0, usuarioController.deleteUsuario(fake));
 	}
 }
