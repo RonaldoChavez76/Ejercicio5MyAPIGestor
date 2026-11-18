@@ -1,0 +1,36 @@
+services:
+  - type: web
+    name: ejercicio5-backend
+    runtime: docker
+    repo: https://github.com/RonaldoChavez76/Ejercicio5MyAPIGestor
+    branch: master
+    plan: free
+    dockerfilePath: ./Dockerfile
+    healthCheckPath: /actuator/health
+    envVars:
+      - key: PORT
+        value: "8081"
+      - key: USE_INTERNAL_DB
+        value: "true"
+      - key: SPRING_PROFILES_ACTIVE
+        value: prod
+      - key: SPRING_DATASOURCE_URL
+        value: jdbc:mariadb://127.0.0.1:3306/dbgestor
+      - key: SPRING_DATASOURCE_USERNAME
+        value: root
+      - key: SPRING_DATASOURCE_PASSWORD
+        generateValue: true
+
+  - type: web
+    name: ejercicio5-frontend
+    runtime: docker
+    repo: https://github.com/RonaldoChavez76/Ejercicio5Cliente
+    branch: master
+    plan: free
+    dockerfilePath: ./Dockerfile
+    healthCheckPath: /actuator/health
+    envVars:
+      - key: PORT
+        value: "8080"
+      - key: BACKEND_URL
+        value: https://ejercicio5-backend.onrender.com
